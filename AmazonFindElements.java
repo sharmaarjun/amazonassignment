@@ -3,6 +3,8 @@ package com.ecommerce.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -100,26 +102,31 @@ class AmazonFindElements {
 		WebElement viewCart = driver.findElement(By.id("nav-cart-count"));
 		viewCart.click();
 	}
-	/*
+	
 	@Test
-	public void addAddress() {
+	public void addAddress() throws InterruptedException {
 		String siteUrl = "https://www.amazon.in/";
 		driver.get(siteUrl);
-		driver.findElement(By.id("glow-ingress-block")).click();
-		//using alert
-		/*
-		Alert alert = driver.switchTo().alert();
-		alert.sendKeys("134113");
-		alert.accept();
-		*/
-	/*
-		//WebElement address = driver.findElement(By.xpath("//*[@id=\"GLUXZipUpdateInput\"]"));
-		driver.findElement(By.className("GLUX_Full_Width a-declarative")).sendKeys("134113");
-		//address.sendKeys("134113");
-		driver.findElement(By.xpath("//*[@id=\"GLUXZipUpdate\"]/span/input")).click();
+		//driver.findElement(By.id("glow-ingress-block")).click();
+		driver.findElement(By.xpath("//*[@id=\"nav-global-location-popover-link\"]")).click();
+		String mainWindow = driver.getWindowHandle();
 		
+		Set<String> windows = driver.getWindowHandles();
+		Iterator<String> itrs = windows.iterator();
+		while(itrs.hasNext()) {
+			String childWindow = itrs.next();
+			// switch to child window
+			driver.switchTo().window(childWindow);
+			Thread.sleep(2000);
+			driver.findElement(By.cssSelector("#GLUXZipUpdateInput")).sendKeys("134113");
+			Thread.sleep(2000);
+			driver.findElement(By.cssSelector("#GLUXZipUpdate > span > input")).click();
+			Thread.sleep(2000);
+			driver.close();
+		}
+		driver.switchTo().window(mainWindow);
 	}
-	*/
+	
 	@Test
 	public void sideMenu() {
 		String siteUrl = "https://www.amazon.in/";
